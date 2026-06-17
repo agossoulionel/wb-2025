@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bien-être au Maroc / الرفاهية في المغرب</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bleu:#1B4F8A;
+  --vert:#2E8B6A;
+  --fond:#FAFAFA;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--fond);
+  color:#1a1a1a;
+}
+body[dir="rtl"]{font-family:'Tajawal',sans-serif;}
+.barre-haut{
+  position:fixed;top:0;left:0;height:4px;
+  background:linear-gradient(90deg,var(--bleu),var(--vert));
+  width:0%;transition:width .4s ease;z-index:1000;
+}
+header{
+  position:fixed;top:4px;left:0;right:0;
+  background:var(--bleu);color:#fff;padding:14px 20px;
+  display:flex;justify-content:space-between;align-items:center;z-index:999;
+  box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+header h1{margin:0;font-size:16px;font-weight:600;}
+.btn-lang{
+  background:#fff;color:var(--bleu);border:none;border-radius:6px;
+  padding:6px 14px;font-weight:700;cursor:pointer;font-size:13px;
+}
+main{max-width:720px;margin:0 auto;padding:78px 16px 50px;}
+.page{display:none;}
+.page.actif{display:block;animation:apparition .3s ease;}
+@keyframes apparition{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.carte{
+  background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.08);
+  padding:26px;margin-bottom:16px;
+}
+.carte h2{color:var(--bleu);margin-top:0;}
+.btn-principal{
+  display:block;width:100%;background:var(--bleu);color:#fff;border:none;
+  border-radius:8px;padding:14px;font-size:16px;font-weight:700;cursor:pointer;
+  margin-top:14px;font-family:inherit;
+}
+.btn-principal:hover{opacity:.9;}
+.btn-secondaire{
+  display:block;width:100%;background:transparent;color:var(--bleu);
+  border:2px solid var(--bleu);border-radius:8px;padding:12px;font-size:15px;
+  font-weight:700;cursor:pointer;margin-top:10px;font-family:inherit;
+}
+.champ{margin-bottom:16px;}
+.champ label{display:block;font-weight:600;margin-bottom:6px;font-size:14px;}
+.champ select,.champ input[type=text]{
+  width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;
+  font-size:15px;font-family:inherit;background:#fff;
+}
+.erreur{color:#c0392b;font-size:13px;margin-top:10px;display:none;font-weight:600;}
+.item-bloc{margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid #eee;}
+.item-bloc:last-child{border-bottom:none;}
+.item-num{color:var(--bleu);font-weight:700;font-size:12px;letter-spacing:.5px;}
+.item-texte{font-weight:600;margin:6px 0 12px;font-size:15px;}
+.echelle{display:flex;gap:6px;flex-wrap:wrap;}
+.opt-label{
+  flex:1;min-width:58px;border:1px solid #ccc;border-radius:8px;
+  overflow:hidden;cursor:pointer;text-align:center;
+}
+.opt-label input{position:absolute;opacity:0;width:0;height:0;}
+.opt-label span{display:block;padding:9px 4px;font-size:11.5px;font-weight:600;}
+.opt-label input:checked + span{background:var(--bleu);color:#fff;}
+.opt-label:hover{border-color:var(--bleu);}
+.champ select:focus,.champ input[type=text]:focus{outline:2px solid var(--bleu);outline-offset:1px;}
+.note-confidentialite{font-size:12px;color:#666;margin-top:18px;line-height:1.5;border-top:1px dashed #ddd;padding-top:12px;}
+.pied-page{text-align:center;font-size:12px;color:#999;margin-top:30px;}
+.barre-score-conteneur{
+  background:#eee;border-radius:20px;height:24px;overflow:hidden;margin:18px 0;
+}
+.barre-score{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,var(--bleu),var(--vert));
+  border-radius:20px;transition:width 1s ease;
+}
+.score-total{font-size:40px;font-weight:800;color:var(--bleu);text-align:center;margin:8px 0;}
+.interpretation{
+  text-align:center;font-size:15px;font-weight:700;padding:14px;
+  border-radius:8px;margin:16px 0;
+}
+.interpretation.faible{background:#fdecea;color:#c0392b;}
+.interpretation.modere{background:#fff8e1;color:#b8860b;}
+.interpretation.eleve{background:#e8f6ef;color:var(--vert);}
+.toast{
+  position:fixed;bottom:20px;right:20px;background:var(--vert);color:#fff;
+  padding:12px 20px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.25);
+  display:none;z-index:2000;font-size:14px;font-weight:600;max-width:260px;
+}
+.toast.erreur{background:#c0392b;}
+body[dir="rtl"] .toast{right:auto;left:20px;}
+@media print{
+  header,.barre-haut,.btn-secondaire,#p0,#p1,#p2{display:none !important;}
+  main{padding-top:10px;}
+}
+</style>
+</head>
+<body dir="ltr">
+<iframe name="_gs_frame" style="display:none" title="cadre-envoi-cache"></iframe>
+ 
+<div class="barre-haut" id="barreHaut"></div>
+ 
+<header>
+  <h1 id="txtHeader">Bien-être au Maroc</h1>
+  <button class="btn-lang" onclick="basculer()" id="btnLang">AR</button>
+</header>
+ 
+<main>
+ 
+  <div class="page actif" id="p0">
+    <div class="carte">
+      <h2 id="p0Titre"></h2>
+      <p id="p0Institution"></p>
+      <p id="p0Objectif"></p>
+      <p id="p0Duree"></p>
+      <p id="p0Rgpd"></p>
+      <button class="btn-principal" onclick="allerA(1)" id="p0Btn"></button>
+      <p class="note-confidentialite" id="p0Note"></p>
+    </div>
+  </div>
+ 
+  <div class="page" id="p1">
+    <div class="carte">
+      <h2 id="p1Titre"></h2>
+      <div class="champ">
+        <label id="lblAge"></label>
+        <select id="age"></select>
+      </div>
+      <div class="champ">
+        <label id="lblGenre"></label>
+        <select id="genre"></select>
+      </div>
+      <div class="champ">
+        <label id="lblEducation"></label>
+        <select id="education"></select>
+      </div>
+      <div class="champ">
+        <label id="lblSituation"></label>
+        <select id="situation"></select>
+      </div>
+      <div class="champ">
+        <label id="lblPays"></label>
+        <input type="text" id="pays">
+      </div>
+      <p class="erreur" id="erreurDemo"></p>
+      <button class="btn-principal" onclick="valDemo()" id="p1Btn"></button>
+    </div>
+  </div>
+ 
+  <div class="page" id="p2">
+    <div class="carte">
+      <h2 id="p2Titre"></h2>
+      <p id="p2Consigne"></p>
+      <div id="itemsConteneur"></div>
+      <p class="erreur" id="erreurWemwbs"></p>
+      <button class="btn-principal" onclick="soumettre()" id="p2Btn"></button>
+    </div>
+  </div>
+ 
+  <div class="page" id="p3">
+    <div class="carte">
+      <h2 id="p3Titre"></h2>
+      <div class="score-total" id="scoreTotal"></div>
+      <div class="barre-score-conteneur"><div class="barre-score" id="barreScore"></div></div>
+      <div class="interpretation" id="interpretationTxt"></div>
+      <p id="p3Merci"></p>
+      <button class="btn-secondaire" onclick="resetQ()" id="p3BtnReset"></button>
+      <button class="btn-principal" onclick="window.print()" id="p3BtnTelecharger"></button>
+    </div>
+  </div>
+ 
+</main>
+ 
+<div class="pied-page" id="piedPage"></div>
+ 
+<div class="toast" id="toast"></div>
+ 
+<script>
+// 1. URL Google Sheets (remplacée automatiquement à la cellule 4)
+var SHEETS_URL = "https://script.google.com/macros/s/AKfycbwz4i4f6Oo_dopylcWYRCmDrRqO2xK2kXwerd_mB_8n8Gw-kihjFBFJaNMRCh4DauL3oQ/exec";
+ 
+// 2. Variables globales d'état
+var lng = "fr";
+var pageN = 0;
+var tDebut = Date.now();
+var demo = {};
+var reponses = {};
+ 
+// 3. Objet de traductions
+var T = {
+  fr: {
+    header: "Bien-être au Maroc",
+    p0Titre: "Bien-être au Maroc",
+    p0Institution: "Étude réalisée par Ali Bezzaa — FSJES Marrakech",
+    p0Objectif: "Cette étude utilise l'échelle WEMWBS (2007), un outil scientifique validé internationalement, pour évaluer votre bien-être mental au cours des deux dernières semaines. Vos réponses contribueront à mieux comprendre le bien-être des étudiants au Maroc.",
+    p0Duree: "⏱ Durée estimée : 5 minutes",
+    p0Rgpd: "🔒 Vos réponses sont entièrement anonymes et confidentielles, conformément au RGPD. Aucune donnée personnelle identifiable n'est collectée.",
+    p0Btn: "Commencer le questionnaire →",
+    p0Note: "Ce questionnaire ne collecte ni nom, ni adresse e-mail, ni aucun identifiant personnel. Les données agrégées serviront uniquement à des fins de recherche académique sur le bien-être étudiant.",
+    piedPage: "Échelle WEMWBS (Warwick-Edinburgh Mental Well-being Scale, 2007) — Usage académique",
+    btnLang: "AR",
+    p1Titre: "Informations sociodémographiques",
+    lblAge: "Tranche d'âge",
+    lblGenre: "Genre",
+    lblEducation: "Niveau d'éducation",
+    lblSituation: "Situation professionnelle",
+    lblPays: "Pays de résidence",
+    placeholderPays: "Entrez votre pays",
+    optAge: ["18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
+    optGenre: ["Homme", "Femme", "Préfère ne pas répondre"],
+    optEducation: ["Primaire", "Collège", "Lycée", "Licence", "Master", "Doctorat", "Autre"],
+    optSituation: ["Employé(e)", "Indépendant(e)", "Étudiant(e)", "Sans emploi", "Retraité(e)", "Autre"],
+    erreurDemo: "Merci de remplir tous les champs avant de continuer.",
+    p1Btn: "Suivant →",
+    p2Titre: "Questionnaire de bien-être (WEMWBS)",
+    p2Consigne: "Pour chaque affirmation suivante, indiquez la fréquence qui correspond le mieux à votre vécu réel au cours des deux dernières semaines. Il n'y a pas de bonne ou de mauvaise réponse : répondez aussi spontanément que possible.",
+    echelle: ["Jamais", "Rarement", "Quelquefois", "Souvent", "Tout le temps"],
+    items: [
+      "Je me suis senti(e) optimiste quant à l'avenir",
+      "Je me suis senti(e) utile",
+      "Je me suis senti(e) détendu(e)",
+      "J'ai eu des sentiments chaleureux envers d'autres personnes",
+      "J'ai eu de l'énergie à revendre",
+      "J'ai abordé les problèmes avec lucidité",
+      "Je me suis senti(e) bien dans ma peau",
+      "Je me suis senti(e) proche des autres",
+      "J'ai été en mesure de prendre mes propres décisions",
+      "Je me suis senti(e) aimé(e) et apprécié(e)",
+      "Je me suis intéressé(e) à de nouvelles choses",
+      "Je me suis senti(e) joyeux/joyeuse",
+      "Je me suis senti(e) inspiré(e) dans ce que je faisais",
+      "J'ai eu l'impression que je contribuais à quelque chose d'important"
+    ],
+    erreurWemwbs: "Merci de répondre à toutes les questions avant de soumettre.",
+    p2Btn: "Soumettre",
+    p3Titre: "Vos résultats",
+    interpFaible: "Bien-être faible — cherchez un soutien professionnel",
+    interpModere: "Bien-être modéré — prenez soin de vous",
+    interpEleve: "Bien-être élevé — continuez ainsi",
+    p3Merci: "Merci d'avoir participé à cette étude sur le bien-être académique.",
+    p3BtnReset: "Recommencer",
+    p3BtnTelecharger: "Télécharger / Imprimer",
+    toastOk: "✓ Réponse enregistrée",
+    toastErreur: "✗ Erreur lors de l'enregistrement",
+    scoreLabelPrefix: "Score : "
+  },
+  ar: {
+    header: "الرفاهية في المغرب",
+    p0Titre: "الرفاهية في المغرب",
+    p0Institution: "دراسة من إعداد علي بزّاع — كلية العلوم القانونية والاقتصادية والاجتماعية، مراكش",
+    p0Objectif: "تستخدم هذه الدراسة سلّم WEMWBS (2007)، وهو أداة علمية معتمدة دوليًا، لتقييم رفاهيتك النفسية خلال الأسبوعين الماضيين. ستساهم إجاباتك في فهم أفضل لرفاهية الطلبة في المغرب.",
+    p0Duree: "⏱ المدة المقدرة: 5 دقائق",
+    p0Rgpd: "🔒 إجاباتك مجهولة وسرية تمامًا، وفقًا للائحة العامة لحماية البيانات (RGPD). لا يتم جمع أي بيانات شخصية تعريفية.",
+    p0Btn: "ابدأ الاستبيان ←",
+    p0Note: "لا يجمع هذا الاستبيان أي اسم أو بريد إلكتروني أو أي معرّف شخصي. ستُستخدم البيانات المجمّعة فقط لأغراض البحث الأكاديمي حول رفاهية الطلبة.",
+    piedPage: "سلّم WEMWBS (وارويك-إدنبرة لقياس الرفاهية النفسية، 2007) — للاستخدام الأكاديمي",
+    btnLang: "FR",
+    p1Titre: "معلومات سوسيو-ديمغرافية",
+    lblAge: "الفئة العمرية",
+    lblGenre: "الجنس",
+    lblEducation: "المستوى التعليمي",
+    lblSituation: "الوضعية المهنية",
+    lblPays: "بلد الإقامة",
+    placeholderPays: "أدخل بلدك",
+    optAge: ["18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
+    optGenre: ["ذكر", "أنثى", "أفضل عدم الإجابة"],
+    optEducation: ["ابتدائي", "إعدادي", "ثانوي", "ليسانس", "ماستر", "دكتوراه", "آخر"],
+    optSituation: ["موظف/ة", "مستقل/ة", "طالب/ة", "عاطل/ة عن العمل", "متقاعد/ة", "آخر"],
+    erreurDemo: "يرجى تعبئة جميع الحقول قبل الاستمرار.",
+    p1Btn: "التالي ←",
+    p2Titre: "استبيان الرفاهية (WEMWBS)",
+    p2Consigne: "بالنسبة لكل عبارة من العبارات التالية، حدد التكرار الذي يعكس بصدق تجربتك خلال الأسبوعين الماضيين. لا توجد إجابة صحيحة أو خاطئة، فأجب بعفوية قدر الإمكان.",
+    echelle: ["أبدًا", "نادرًا", "أحيانًا", "كثيرًا", "دائمًا"],
+    items: [
+      "شعرت بالتفاؤل تجاه المستقبل",
+      "شعرت أنني مفيد/ة",
+      "شعرت بالاسترخاء",
+      "شعرت بالدفء تجاه الآخرين",
+      "كان لديّ طاقة كافية",
+      "تعاملت مع المشكلات بوضوح",
+      "شعرت بالرضا عن نفسي",
+      "شعرت بالقرب من الآخرين",
+      "كنت قادر/ة على اتخاذ قراراتي بنفسي",
+      "شعرت بأنني محبوب/ة ومُقدَّر/ة",
+      "اهتممت بأشياء جديدة",
+      "شعرت بالبهجة والسعادة",
+      "شعرت بالإلهام فيما أقوم به",
+      "شعرت أن ما أفعله يساهم في شيء مهم"
+    ],
+    erreurWemwbs: "يرجى الإجابة عن جميع الأسئلة قبل الإرسال.",
+    p2Btn: "إرسال",
+    p3Titre: "نتائجك",
+    interpFaible: "رفاهية منخفضة — اطلب دعمًا متخصصًا",
+    interpModere: "رفاهية متوسطة — اهتم بنفسك",
+    interpEleve: "رفاهية مرتفعة — واصل هكذا",
+    p3Merci: "شكرًا لمشاركتك في هذه الدراسة حول الرفاهية الأكاديمية.",
+    p3BtnReset: "إعادة البدء",
+    p3BtnTelecharger: "تحميل / طباعة",
+    toastOk: "✓ تم تسجيل الإجابة",
+    toastErreur: "✗ خطأ في التسجيل",
+    scoreLabelPrefix: "النتيجة: "
+  }
+};
+ 
+// 4. Navigation entre pages (n = numéro de page cible)
+function allerA(n) {
+  document.getElementById("p" + pageN).classList.remove("actif");
+  pageN = n;
+  document.getElementById("p" + pageN).classList.add("actif");
+  majPts();
+  window.scrollTo(0, 0);
+  if (n === 2) {
+    buildItems();
+  }
+}
+ 
+// 5. Mise à jour de la barre de progression supérieure
+function majPts() {
+  var pourcentage = (pageN / 3) * 100;
+  document.getElementById("barreHaut").style.width = pourcentage + "%";
+}
+ 
+// 6. Application des traductions à l'interface
+function appliquer() {
+  var d = T[lng];
+ 
+  document.getElementById("txtHeader").textContent = d.header;
+  document.getElementById("btnLang").textContent = d.btnLang;
+ 
+  document.getElementById("p0Titre").textContent = d.p0Titre;
+  document.getElementById("p0Institution").textContent = d.p0Institution;
+  document.getElementById("p0Objectif").textContent = d.p0Objectif;
+  document.getElementById("p0Duree").textContent = d.p0Duree;
+  document.getElementById("p0Rgpd").textContent = d.p0Rgpd;
+  document.getElementById("p0Btn").textContent = d.p0Btn;
+  document.getElementById("p0Note").textContent = d.p0Note;
+  document.getElementById("piedPage").textContent = d.piedPage;
+ 
+  document.getElementById("p1Titre").textContent = d.p1Titre;
+  document.getElementById("lblAge").textContent = d.lblAge;
+  document.getElementById("lblGenre").textContent = d.lblGenre;
+  document.getElementById("lblEducation").textContent = d.lblEducation;
+  document.getElementById("lblSituation").textContent = d.lblSituation;
+  document.getElementById("lblPays").textContent = d.lblPays;
+  document.getElementById("pays").placeholder = d.placeholderPays;
+  document.getElementById("erreurDemo").textContent = d.erreurDemo;
+  document.getElementById("p1Btn").textContent = d.p1Btn;
+ 
+  remplirSelect("age", d.optAge);
+  remplirSelect("genre", d.optGenre);
+  remplirSelect("education", d.optEducation);
+  remplirSelect("situation", d.optSituation);
+ 
+  document.getElementById("p2Titre").textContent = d.p2Titre;
+  document.getElementById("p2Consigne").textContent = d.p2Consigne;
+  document.getElementById("erreurWemwbs").textContent = d.erreurWemwbs;
+  document.getElementById("p2Btn").textContent = d.p2Btn;
+ 
+  document.getElementById("p3Titre").textContent = d.p3Titre;
+  document.getElementById("p3Merci").textContent = d.p3Merci;
+  document.getElementById("p3BtnReset").textContent = d.p3BtnReset;
+  document.getElementById("p3BtnTelecharger").textContent = d.p3BtnTelecharger;
+ 
+  document.title = d.header;
+ 
+  if (pageN === 2) {
+    buildItems();
+  }
+}
+ 
+// Fonction utilitaire : remplit un <select> en conservant l'index choisi
+function remplirSelect(idChamp, options) {
+  var select = document.getElementById(idChamp);
+  var indexActuel = select.selectedIndex;
+  select.innerHTML = "";
+  var i;
+  for (i = 0; i < options.length; i++) {
+    (function (idx) {
+      var opt = document.createElement("option");
+      opt.value = idx;
+      opt.textContent = options[idx];
+      select.appendChild(opt);
+    })(i);
+  }
+  if (indexActuel >= 0 && indexActuel < options.length) {
+    select.selectedIndex = indexActuel;
+  } else {
+    select.selectedIndex = -1;
+  }
+}
+ 
+// 7. Basculer entre français et arabe
+function basculer() {
+  if (lng === "fr") {
+    lng = "ar";
+  } else {
+    lng = "fr";
+  }
+  var nouvelleDirection = (lng === "ar") ? "rtl" : "ltr";
+  document.documentElement.setAttribute("dir", nouvelleDirection);
+  document.documentElement.setAttribute("lang", lng);
+  document.body.setAttribute("dir", nouvelleDirection);
+  appliquer();
+}
+ 
+// 8. Validation de la page démographique
+function valDemo() {
+  var age = document.getElementById("age").value;
+  var genre = document.getElementById("genre").value;
+  var education = document.getElementById("education").value;
+  var situation = document.getElementById("situation").value;
+  var pays = document.getElementById("pays").value.replace(/^\s+|\s+$/g, "");
+ 
+  if (age === "" || genre === "" || education === "" || situation === "" || pays === "") {
+    document.getElementById("erreurDemo").style.display = "block";
+    return;
+  }
+  document.getElementById("erreurDemo").style.display = "none";
+ 
+  // Stockage avec libellés français canoniques, indépendants de la langue d'affichage
+  var optAgeFR = ["18-24", "25-34", "35-44", "45-54", "55-64", "65+"];
+  var optGenreFR = ["Homme", "Femme", "Préfère ne pas répondre"];
+  var optEducationFR = ["Primaire", "Collège", "Lycée", "Licence", "Master", "Doctorat", "Autre"];
+  var optSituationFR = ["Employé(e)", "Indépendant(e)", "Étudiant(e)", "Sans emploi", "Retraité(e)", "Autre"];
+ 
+  demo = {
+    age: optAgeFR[parseInt(age, 10)],
+    genre: optGenreFR[parseInt(genre, 10)],
+    education: optEducationFR[parseInt(education, 10)],
+    situation: optSituationFR[parseInt(situation, 10)],
+    pays: pays
+  };
+ 
+  allerA(2);
+}
+ 
+// 9. Construction dynamique des 14 items WEMWBS
+function buildItems() {
+  var conteneur = document.getElementById("itemsConteneur");
+  conteneur.innerHTML = "";
+  var items = T[lng].items;
+  var echelle = T[lng].echelle;
+  var i;
+ 
+  for (i = 0; i < 14; i++) {
+    (function (idx) {
+      var bloc = document.createElement("div");
+      bloc.className = "item-bloc";
+ 
+      var numero = document.createElement("div");
+      numero.className = "item-num";
+      numero.textContent = (idx + 1) + " / 14";
+      bloc.appendChild(numero);
+ 
+      var texte = document.createElement("div");
+      texte.className = "item-texte";
+      texte.textContent = items[idx];
+      bloc.appendChild(texte);
+ 
+      var echelleDiv = document.createElement("div");
+      echelleDiv.className = "echelle";
+ 
+      var j;
+      for (j = 0; j < 5; j++) {
+        (function (val) {
+          var label = document.createElement("label");
+          label.className = "opt-label";
+ 
+          var input = document.createElement("input");
+          input.type = "radio";
+          input.name = "item_" + idx;
+          input.value = val + 1;
+          if (reponses["item_" + idx] === (val + 1)) {
+            input.checked = true;
+          }
+          input.onchange = function () {
+            reponses["item_" + idx] = val + 1;
+          };
+ 
+          var span = document.createElement("span");
+          span.textContent = echelle[val];
+ 
+          label.appendChild(input);
+          label.appendChild(span);
+          echelleDiv.appendChild(label);
+        })(j);
+      }
+ 
+      bloc.appendChild(echelleDiv);
+      conteneur.appendChild(bloc);
+    })(i);
+  }
+}
+ 
+// 10. Soumission du questionnaire et calcul du score
+function soumettre() {
+  var i;
+  var total = 0;
+  var complet = true;
+ 
+  for (i = 0; i < 14; i++) {
+    if (reponses["item_" + i] === undefined) {
+      complet = false;
+    } else {
+      total = total + reponses["item_" + i];
+    }
+  }
+ 
+  if (!complet) {
+    document.getElementById("erreurWemwbs").style.display = "block";
+    return;
+  }
+  document.getElementById("erreurWemwbs").style.display = "none";
+ 
+  var interpretationCode;
+  var interpretationTexte;
+  if (total <= 42) {
+    interpretationCode = "faible";
+    interpretationTexte = T[lng].interpFaible;
+  } else if (total <= 52) {
+    interpretationCode = "modere";
+    interpretationTexte = T[lng].interpModere;
+  } else {
+    interpretationCode = "eleve";
+    interpretationTexte = T[lng].interpEleve;
+  }
+ 
+  document.getElementById("scoreTotal").textContent = T[lng].scoreLabelPrefix + total + " / 70";
+  var elInterp = document.getElementById("interpretationTxt");
+  elInterp.textContent = interpretationTexte;
+  elInterp.className = "interpretation " + interpretationCode;
+  document.getElementById("barreScore").style.width = "0%";
+ 
+  allerA(3);
+ 
+  setTimeout(function () {
+    var pourcentageScore = (total / 70) * 100;
+    document.getElementById("barreScore").style.width = pourcentageScore + "%";
+  }, 150);
+ 
+  var duree = Math.round((Date.now() - tDebut) / 1000);
+ 
+  var entree = {
+    timestamp: new Date().toISOString(),
+    langue: lng,
+    age: demo.age,
+    genre: demo.genre,
+    education: demo.education,
+    situation: demo.situation,
+    pays: demo.pays,
+    score_total: total,
+    interpretation: interpretationCode,
+    duree_secondes: duree
+  };
+ 
+  for (i = 0; i < 14; i++) {
+    entree["item_" + (i + 1)] = reponses["item_" + i];
+  }
+ 
+  envoyerDonnees(entree);
+}
+ 
+// 11. Envoi des données vers Google Sheets via formulaire caché (pas de fetch)
+function envoyerDonnees(entree) {
+  try {
+    var form = document.createElement("form");
+    form.method = "POST";
+    form.action = SHEETS_URL;
+    form.target = "_gs_frame";
+    form.style.display = "none";
+ 
+    var cle;
+    for (cle in entree) {
+      if (entree.hasOwnProperty(cle)) {
+        var champCache = document.createElement("input");
+        champCache.type = "hidden";
+        champCache.name = cle;
+        champCache.value = entree[cle];
+        form.appendChild(champCache);
+      }
+    }
+ 
+    document.body.appendChild(form);
+    form.submit();
+ 
+    setTimeout(function () {
+      if (form.parentNode) {
+        form.parentNode.removeChild(form);
+      }
+    }, 2000);
+ 
+    sauvegarderLocal(entree);
+    afficherToast(T[lng].toastOk, "ok");
+  } catch (erreur) {
+    sauvegarderLocal(entree);
+    afficherToast(T[lng].toastErreur, "erreur");
+  }
+}
+ 
+// 12. Sauvegarde locale de secours (localStorage)
+function sauvegarderLocal(entree) {
+  try {
+    var brut = localStorage.getItem("wemwbs");
+    var liste = brut ? JSON.parse(brut) : [];
+    liste.push(entree);
+    localStorage.setItem("wemwbs", JSON.stringify(liste));
+  } catch (erreur) {
+    // localStorage indisponible (navigation privée, etc.) — on ignore
+  }
+}
+ 
+// 13. Affichage d'un message toast temporaire
+function afficherToast(msg, cls) {
+  var toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.className = "toast" + (cls === "erreur" ? " erreur" : "");
+  toast.style.display = "block";
+  setTimeout(function () {
+    toast.style.display = "none";
+  }, 3000);
+}
+ 
+// 14. Réinitialisation complète du questionnaire
+function resetQ() {
+  reponses = {};
+  demo = {};
+  tDebut = Date.now();
+  document.getElementById("age").selectedIndex = -1;
+  document.getElementById("genre").selectedIndex = -1;
+  document.getElementById("education").selectedIndex = -1;
+  document.getElementById("situation").selectedIndex = -1;
+  document.getElementById("pays").value = "";
+  document.getElementById("erreurDemo").style.display = "none";
+  document.getElementById("erreurWemwbs").style.display = "none";
+  document.getElementById("itemsConteneur").innerHTML = "";
+  document.getElementById("barreScore").style.width = "0%";
+  allerA(0);
+}
+ 
+// 15. Initialisation de l'interface au chargement de la page
+appliquer();
+</script>
+</body>
+</html>
